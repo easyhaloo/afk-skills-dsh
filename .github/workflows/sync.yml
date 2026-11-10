@@ -1,0 +1,50 @@
+name: Sync AFK skills snapshot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1" # weekly, Mondays 03:00 UTC
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-skills
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync skills from easyhaloo/afk
+        run: |
+          git clone --depth 1 https://github.com/easyhaloo/afk.git /tmp/afk
+          ./sync-skills.sh /tmp/afk/skills
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain skills)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump patch version, commit and tag
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "afk-skills-sync"
+          git config user.email "actions@users.noreply.github.com"
+          node -e "
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const [maj, min, pat] = p.version.replace(/^v/, '').split('.');
+            p.version = [maj, min, Number(pat) + 1].join('.');
+            fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
+            console.log('version ->', p.version);
+          "
+          V=$(node -p "require('./package.json').version")
+          git add skills package.json
+          git commit -m "chore(sync): skills snapshot from easyhaloo/afk, version ${V}"
+          git tag "v${V}"
+          git push origin HEAD --tags
