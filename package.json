@@ -1,7 +1,7 @@
 {
   "name": "afk-skills-loader",
   "description": "AFK skill suite (github.com/easyhaloo/afk) as a DeepSeek Harness bundle: runtime git reference to the AFK repo, no skill snapshot",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "type": "module",
   "dsh": {
     "bundle": {
@@ -21,8 +21,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-skill-filesystem": "0.2.2-rc.1",
-    "afk-skills-dsh": "git+file:///Users/shenggangshu/llm/afk-dsh-bundle#e3bdecb"
+    "@deepseek-ai/dsh-skill-filesystem": "0.2.2-rc.1"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.1.0"
