@@ -1,7 +1,7 @@
 {
   "name": "afk-skills-dsh",
   "description": "AFK skill suite (github.com/easyhaloo/afk) as a DeepSeek Harness bundle: runtime git reference to the AFK repo, no skill snapshot",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "type": "module",
   "dsh": {
     "bundle": {
@@ -16,7 +16,10 @@
   },
   "files": [
     "lib/index.js",
-    "cordis.patch.yml"
+    "cordis.patch.yml",
+    "afk",
+    "sync-skills.sh",
+    "package.json"
   ],
   "license": "MIT",
   "dependencies": {
@@ -24,5 +27,8 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.1.0"
+  },
+  "scripts": {
+    "prepare": "git submodule update --init --recursive"
   }
 }

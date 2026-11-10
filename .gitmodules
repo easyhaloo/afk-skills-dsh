@@ -1,0 +1,3 @@
+[submodule "afk"]
+	path = afk
+	url = https://github.com/easyhaloo/afk.git
