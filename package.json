@@ -17,8 +17,7 @@
   "files": [
     "lib/index.js",
     "cordis.patch.yml",
-    "afk",
-    "sync-skills.sh",
+    "afk/skills",
     "package.json"
   ],
   "license": "MIT",
