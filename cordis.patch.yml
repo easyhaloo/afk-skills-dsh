@@ -12,4 +12,5 @@
       name: afk-skills-dsh
       config:
         repo: https://github.com/easyhaloo/afk.git
-        ref: main
+        ref: latest            # follow the highest plugin-v* tag; pin e.g. plugin-v1.2.2 to freeze/rollback
+        fallbackRef: main      # used until the first plugin-v* tag exists
