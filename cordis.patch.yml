@@ -9,7 +9,7 @@
 
 - insert:
     - id: afk-skills
-      name: afk-skills-dsh
+      name: afk-skills-loader
       config:
         repo: https://github.com/easyhaloo/afk.git
         ref: latest            # follow the highest plugin-v* tag; pin e.g. plugin-v1.2.2 to freeze/rollback
