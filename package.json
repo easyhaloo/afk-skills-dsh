@@ -22,7 +22,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-skill-filesystem": "0.2.2-rc.1"
+    "@deepseek-ai/dsh-skill-filesystem": "0.2.2-rc.1",
+    "afk-skills-dsh": "git+file:///Users/shenggangshu/llm/afk-dsh-bundle#e3bdecb"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "~4.1.0"
