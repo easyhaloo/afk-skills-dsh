@@ -1,8 +1,13 @@
 {
   "name": "afk-skills-dsh",
   "description": "AFK skill suite (github.com/easyhaloo/afk) as a DeepSeek Harness bundle: runtime git reference to the AFK repo, no skill snapshot",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
