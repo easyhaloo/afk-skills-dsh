@@ -1,5 +1,0 @@
-# Auth state files (credentials)
-playwright/.auth/
-
-# Persistent browser profiles (credentials)
-playwright/.profiles/

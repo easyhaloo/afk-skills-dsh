@@ -1,11 +1,15 @@
-# The afk-skills bundle patch: mounts the bundled AFK skill suite as ONE
-# additional skill provider beside the base skill-filesystem row.
+# The afk-skills bundle patch: mounts the afk skill set by REFERENCE.
 #
-# The row's module (afk-skills-dsh, this package's main entry) resolves its own
-# skills/ directory from import.meta.url and mounts a second instance of
-# @deepseek-ai/dsh-skill-filesystem with includeDefaultRoots:false, so this
-# provider sees ONLY the packaged afk skills (rank 300 custom roots).
+# No skill snapshot ships in this package. The row's module maintains a
+# shallow clone of the AFK repository in a local cache and mounts an isolated
+# skill-filesystem provider scanning the clone's skills/ directory.
+#
+# Override repo/ref/cacheDir here, or per machine via env:
+#   AFK_SKILLS_REPO / AFK_SKILLS_REF / AFK_SKILLS_CACHE_DIR
 
 - insert:
     - id: afk-skills
       name: afk-skills-dsh
+      config:
+        repo: https://github.com/easyhaloo/afk.git
+        ref: main

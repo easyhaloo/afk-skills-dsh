@@ -1,65 +1,57 @@
 # afk-skills-dsh
 
-[AFK skill suite](https://github.com/easyhaloo/afk) packaged as a
+[AFK skill suite](https://github.com/easyhaloo/afk) as a
 [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness)
-plugin bundle — installable from GitHub, no local checkout of the AFK repo
-required.
+plugin bundle — installed from GitHub, **referencing** the AFK repo at
+runtime. No skill snapshot is stored here.
 
-## What it ships
+## How it works
 
-24 `afk-*` / utility skills from the AFK repo (`skills/` snapshot, synced by
-`sync-skills.sh`). The bundle mounts one isolated
-`@deepseek-ai/dsh-skill-filesystem` provider scoped to the packaged `skills/`
-directory, so it never collides with project or user skill roots.
+On activation the bundle maintains a shallow git clone of `easyhaloo/afk` in
+`~/.dsh/afk-skills-cache` (created on first use, refreshed on activation and
+every 15 minutes by default) and mounts an isolated `skill-filesystem`
+provider scanning the clone's `skills/` directory. Skill edits land in the
+AFK repo; every user picks them up on the next cache refresh — no bundle
+release required.
 
-Skills whose `SKILL.md` declares `disable-model-invocation: true` (e.g.
-`afk-grill-me`, `afk-implement`, `afk-qa`) are user-invocable commands only —
-by design, matching upstream.
+While the cache is being cloned (first run / offline without cache), the
+skill root is absent and DSH's missing-root probing keeps polling; skills
+appear automatically once the clone lands. A cached clone keeps working
+offline; refresh failures are non-fatal warnings.
 
 ## Install (any DSH user)
 
-In a DSH session, ask the agent to install the bundle, or use the Web sidebar
-**Plugins** page, with a pinned tag (recommended):
+Pin a bundle tag (recommended):
 
 ```
-github:easyhaloo/afk-skills-dsh#v1.2.3
+github:easyhaloo/afk-skills-dsh#v2.0.0
 ```
 
-or floating to the newest tag:
+or float: `github:easyhaloo/afk-skills-dsh#semver:^2.0.0`
 
-```
-github:easyhaloo/afk-skills-dsh#semver:^1.2.3
-```
+## Configuration
 
-## Upgrade the whole skill set
+Set in `cordis.patch.yml` (profile-wide) or per machine via env —
+patch config wins over env:
 
-The bundle version tracks the AFK plugin version
-(`easyhaloo/afk` → `.claude-plugin/plugin.json`). To release a new set:
+| Field | Env | Default |
+|---|---|---|
+| `repo` | `AFK_SKILLS_REPO` | `https://github.com/easyhaloo/afk.git` |
+| `ref` | `AFK_SKILLS_REF` | `main` |
+| `cacheDir` | `AFK_SKILLS_CACHE_DIR` | `~/.dsh/afk-skills-cache` |
+| `refreshIntervalMs` | `AFK_SKILLS_REFRESH_MS` | `900000`（15 分钟，最小 60000） |
 
-```bash
-./sync-skills.sh                      # snapshot skills from ~/llm/afk/skills
-# bump "version" in package.json, then commit + tag
-git tag v<version> && git push --tags
-```
+Pin a stable skill set by pointing `ref` at a tag (e.g. `cli-v0.2.44`) or a
+branch. Requirements: `git` on PATH; network for the first clone.
 
-Users then reinstall the bundle at the new tag (or rely on `#semver:`).
+## Versioning of this bundle
 
-A scheduled GitHub Action (`.github/workflows/sync.yml`) does the same
-automatically: syncs from `easyhaloo/afk` default branch, bumps the patch
-version, commits, and tags when skills changed.
-
-## Repo layout
-
-```
-├── package.json         # dsh.bundle.patch declaration + version
-├── cordis.patch.yml     # inserts the afk-skills plugin row
-├── lib/index.js         # bundle entry: mounts the isolated skill provider
-├── skills/              # snapshot of easyhaloo/afk skills (source of truth: that repo)
-└── sync-skills.sh       # local sync from a checked-out AFK repo
-```
+Bundle versions (v2.x) track the *loader* only — refresh logic and config.
+Skill content is versioned in `easyhaloo/afk` itself; there is nothing to
+release here for skill-only changes.
 
 ## Source of truth
 
-`skills/` here is a **snapshot**. Skill edits belong in
-[easyhaloo/afk](https://github.com/easyhaloo/afk) (`skills/` directory);
-never edit this snapshot directly.
+All skill content lives in
+[easyhaloo/afk](https://github.com/easyhaloo/afk) (`skills/` directory).
+Never edit skills anywhere else.
