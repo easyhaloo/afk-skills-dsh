@@ -59,10 +59,10 @@ the tag does not exist yet.
 Pin a bundle tag (recommended):
 
 ```
-github:easyhaloo/afk-skills-dsh#v2.5.0
+github:easyhaloo/afk-skills-dsh#v2.5.2
 ```
 
-or float: `github:easyhaloo/afk-skills-dsh#semver:^2.5.0`
+or float: `github:easyhaloo/afk-skills-dsh#semver:^2.5.2`
 
 ## Configuration
 
